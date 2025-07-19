@@ -1,0 +1,150 @@
+import { createContext, useContext, useEffect, useState } from 'react';
+import { 
+  signInWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+  GoogleAuthProvider,
+  signInWithPopup
+} from 'firebase/auth';
+import { auth, ADMIN_EMAIL } from '../firebase';
+import { toast } from 'react-hot-toast';
+
+const AuthContext = createContext();
+
+export function useAuth() {
+  return useContext(AuthContext);
+}
+
+export function AuthProvider({ children }) {
+  const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  // Check if the current user is an admin
+  const isAdmin = currentUser?.email === ADMIN_EMAIL;
+
+  // Handle auth state changes
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Only update if the user is an admin
+        if (user.email === ADMIN_EMAIL) {
+          setCurrentUser({
+            uid: user.uid,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            isAdmin: true
+          });
+        } else {
+          // If not admin, sign them out
+          firebaseSignOut(auth);
+        }
+      } else {
+        setCurrentUser(null);
+      }
+      setLoading(false);
+    });
+
+    return unsubscribe;
+  }, []);
+
+  const login = async (email, password) => {
+    try {
+      // Sign in with email and password using Firebase Auth
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      
+      // Check if the user is an admin
+      if (user.email === ADMIN_EMAIL) {
+        setCurrentUser({
+          uid: user.uid,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          isAdmin: true
+        });
+        toast.success('Successfully signed in as admin');
+        return user;
+      } else {
+        // If not admin, sign them out and show error
+        await firebaseSignOut(auth);
+        toast.error('Access denied. Admin privileges required.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      let errorMessage = 'Error signing in. Please try again.';
+      
+      if (error.code === 'auth/user-not-found' || error.code === 'auth/wrong-password') {
+        errorMessage = 'Invalid email or password';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      } else if (error.code === 'auth/user-disabled') {
+        errorMessage = 'This account has been disabled.';
+      }
+      
+      toast.error(errorMessage);
+      return null;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      // Sign out from Firebase Auth
+      await firebaseSignOut(auth);
+      
+      // Clear the current user from state
+      setCurrentUser(null);
+      
+      toast.success('Successfully signed out');
+      return true;
+    } catch (error) {
+      console.error('Error signing out:', error);
+      toast.error('Error signing out. Please try again.');
+      return false;
+    }
+  };
+  
+  // Google Sign-In method
+  const signInWithGoogle = async () => {
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      
+      // Check if the user is an admin
+      if (user.email === ADMIN_EMAIL) {
+        setCurrentUser({
+          uid: user.uid,
+          email: user.email,
+          emailVerified: user.emailVerified,
+          isAdmin: true
+        });
+        toast.success('Successfully signed in as admin');
+        return user;
+      } else {
+        // If not admin, sign them out and show error
+        await firebaseSignOut(auth);
+        toast.error('Access denied. Admin privileges required.');
+        return null;
+      }
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      toast.error(error.message || 'Failed to sign in with Google');
+      return null;
+    }
+  };
+
+  const value = {
+    currentUser,
+    isAdmin,
+    login,  // Changed from signIn to login
+    logout, // Changed from signOut to logout
+    signInWithGoogle,
+    loading
+  };
+
+  return (
+    <AuthContext.Provider value={value}>
+      {!loading && children}
+    </AuthContext.Provider>
+  );
+}

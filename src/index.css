@@ -1,0 +1,278 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Fonts */
+@font-face {
+  font-family: 'Pencerio';
+  src: url('./assets/Pencerio-Hairline.woff2') format('woff2'),
+       url('./assets/Pencerio-Hairline.woff') format('woff'),
+       url('./assets/Pencerio-Hairline.ttf') format('truetype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Base styles */
+:root {
+  --primary: #E64A9B;
+  --primary-dark: #c73a84;
+  --secondary: #4CAF50;
+  --dark: #1a1a1a;
+  --light: #f8f9fa;
+  --gray: #6c757d;
+  --light-gray: #e9ecef;
+  --white: #ffffff;
+  --black: #000000;
+  
+  font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: var(--dark);
+  background-color: var(--white);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  @apply font-bold leading-tight tracking-tight;
+  color: var(--dark);
+}
+
+h1 { @apply text-4xl md:text-5xl; }
+h2 { @apply text-3xl md:text-4xl; }
+h3 { @apply text-2xl md:text-3xl; }
+h4 { @apply text-xl md:text-2xl; }
+
+p {
+  @apply mb-4 text-gray-700;
+  line-height: 1.7;
+}
+
+a {
+  @apply text-primary hover:text-primary-dark transition-colors duration-200;
+  text-decoration: none;
+}
+
+/* Layout */
+.container {
+  @apply mx-auto px-4 md:px-6;
+  max-width: 1200px;
+  
+}
+
+
+/* Buttons */
+.btn {
+  @apply inline-flex items-center justify-center px-6 py-3 rounded-md font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2;
+}
+
+/* Primary Button */
+.btn-primary {
+  @apply bg-primary text-white hover:bg-primary-dark hover:text-white focus:ring-primary/50;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--primary-dark);
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s ease-out;
+}
+
+.btn-primary:hover::after {
+  transform: scaleY(1);
+}
+
+/* Secondary Button */
+.btn-secondary {
+  @apply bg-secondary text-white hover:bg-opacity-90 hover:text-white focus:ring-secondary/50;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.btn-secondary::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.1);
+  z-index: -1;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.3s ease-out;
+}
+
+.btn-secondary:hover::after {
+  transform: scaleY(1);
+}
+
+/* Outline Button */
+.btn-outline {
+  @apply border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900 focus:ring-gray-300;
+  transition: all 0.2s ease-in-out;
+}
+
+/* Dark mode button adjustments */
+.dark .btn-outline {
+  @apply border-gray-600 text-gray-200 hover:bg-gray-700 hover:text-white;
+}
+
+/* Ensure text remains visible on all button states */
+.btn-primary,
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-secondary,
+.btn-secondary:hover,
+.btn-secondary:focus {
+  color: white !important;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+/* Button with icon */
+.btn-icon {
+  @apply inline-flex items-center gap-2;
+}
+
+/* Disabled state */
+.btn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}
+
+/* Cards */
+.card {
+  @apply bg-white rounded-lg shadow-md overflow-hidden transition-all duration-300 hover:shadow-lg;
+}
+
+/* Blog styles */
+.blog-content {
+  @apply max-w-4xl mx-auto py-8 px-4;
+}
+
+.blog-content img {
+  @apply my-6 rounded-lg shadow-md w-full h-auto;
+}
+
+.blog-content h2,
+.blog-content h3,
+.blog-content h4 {
+  @apply mt-8 mb-4;
+}
+
+.blog-content p {
+  @apply my-4;
+}
+
+.blog-content ul,
+.blog-content ol {
+  @apply my-4 pl-6;
+}
+
+.blog-content li {
+  @apply mb-2;
+}
+
+.blog-content blockquote {
+  @apply border-l-4 border-primary bg-gray-50 italic my-6 p-4 pl-6 text-gray-700;
+}
+
+/* Forms */
+.form-input {
+  @apply w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary/50 focus:border-transparent;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .container {
+    @apply px-4;
+  }
+  
+  h1 { @apply text-3xl; }
+  h2 { @apply text-2xl; }
+  h3 { @apply text-xl; }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  :root {
+    color: #f8f9fa;
+    background-color: #121212;
+  }
+  
+  .dark\:bg-gray-800 {
+    background-color: #1e1e1e;
+  }
+  
+  .dark\:text-white {
+    color: #f8f9fa;
+  }
+  
+  .dark\:text-gray-300 {
+    color: #d1d5db;
+  }
+  
+  .dark\:bg-gray-900 {
+    background-color: #121212;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-gray-100;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-400 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-gray-500;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+  }
+  
+  .blog-content {
+    max-width: 100%;
+    padding: 0;
+  }
+}
