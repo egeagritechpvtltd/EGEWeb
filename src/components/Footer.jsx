@@ -251,14 +251,20 @@ const Footer = () => {
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
               &copy; {currentYear} EGE Agritech PVT Ltd. All rights reserved.
             </p>
-            <div className="flex space-x-6">
-              <Link to="/privacy" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200">
+            <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+              <Link to="/privacy" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200 whitespace-nowrap">
                 Privacy Policy
               </Link>
-              <Link to="/terms" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200">
+              <Link to="/terms" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200 whitespace-nowrap">
                 Terms of Service
               </Link>
-              <a href="sitemap.xml" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200">
+              <Link to="/shipping" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200 whitespace-nowrap">
+                Shipping Policy
+              </Link>
+              <Link to="/refund-return" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200 whitespace-nowrap">
+                Refund & Return Policy
+              </Link>
+              <a href="/sitemap.xml" className="text-gray-400 hover:text-primary text-sm transition-colors duration-200 whitespace-nowrap">
                 Sitemap
               </a>
             </div>

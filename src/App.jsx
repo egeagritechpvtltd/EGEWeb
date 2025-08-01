@@ -9,6 +9,8 @@ import BlogPost from './pages/BlogPost';
 import Contact from './pages/Contact';
 import Terms from './pages/legal/Terms';
 import Privacy from './pages/legal/Privacy';
+import Shipping from './pages/legal/Shipping';
+import RefundReturn from './pages/legal/RefundReturn';
 import ScrollToTop from './components/ScrollToTop';
 import Admin from './pages/admin';
 import Login from './pages/Login';
@@ -28,6 +30,8 @@ function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/privacy" element={<Privacy />} />
+          <Route path="/shipping" element={<Shipping />} />
+          <Route path="/refund-return" element={<RefundReturn />} />
           
           {/* Authentication Routes */}
           <Route path="/login" element={<Login />} />
